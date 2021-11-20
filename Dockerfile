@@ -2,8 +2,8 @@
 FROM alpine:3.13
 
 # Labels.
-LABEL maintainer="Dharma Putra Klik" \
-    org.label-schema.docker.cmd="docker run --rm -it -v $(pwd):/ansible ~/.ssh/id_rsa:/root/id_rsa dockerimage/ansible:2.11-alpine-3.13"
+LABEL maintainer="Ansible Docker" \
+    org.label-schema.docker.cmd="docker run --rm -it -v $(pwd):/ansible ~/.ssh/id_rsa:/root/id_rsa dockerimage/ansible:2.11-alpine-3.13 || docker run --rm  --net=host -v ${pwd}:/ansible  dharmatkj/ansible-tool:latest ansible-playbook playbook.yml" 
 
 RUN apk --no-cache add \
         bash \
@@ -34,14 +34,17 @@ RUN apk --no-cache add \
     pip3 install ansible-core==2.11.3 && \
     pip3 install mitogen ansible-lint jmespath && \
     pip3 install --upgrade pywinrm && \
+    pip3 install --upgrade docker docker-compose docker-py && \
     apk del build-dependencies && \
     rm -rf /var/cache/apk/* && \
     rm -rf /root/.cache/pip && \
     rm -rf /root/.cargo
 
 RUN mkdir /ansible && \
-    mkdir -p /etc/ansible && \
-    echo 'localhost' > /etc/ansible/hosts
+    mkdir -p /etc/ansible
+
+COPY ansible.cfg /etc/ansible/ansible.cfg
+COPY hosts /etc/ansible/hosts
 
 WORKDIR /ansible
 

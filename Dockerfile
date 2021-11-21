@@ -34,7 +34,6 @@ RUN apk --no-cache add \
     pip3 install ansible-core==2.11.3 && \
     pip3 install mitogen ansible-lint jmespath && \
     pip3 install --upgrade pywinrm && \
-    pip3 install --upgrade docker docker-compose docker-py && \
     apk del build-dependencies && \
     rm -rf /var/cache/apk/* && \
     rm -rf /root/.cache/pip && \

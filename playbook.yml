@@ -1,9 +1,11 @@
-- hosts: localhost
-  connection: local
+- hosts: dev
+  remote_user: zulfi
   gather_facts: no
+  become: true
   tasks:
+  - name: test
+    shell: whoami
   - name: Ansible create file if it doesn't exist example
-    file:
-      path: "devops_server.txt"
-      state: touch
-  
+    command: touch /home/test.txt
+
+    
